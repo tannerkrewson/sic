@@ -35,6 +35,14 @@ function hidePlaylistOutput () {
   $('#playlist-output').hide();
 }
 
+function showPlaylistBtn () {
+  $('#create-playlist-btn').show();
+}
+
+function hidePlaylistBtn () {
+  $('#create-playlist-btn').hide();
+}
+
 
 function setupPlaylistAdding (playlistList) {
   $('#url-add-btn').click(function () {
@@ -169,6 +177,12 @@ PlaylistList.prototype.add = function (playlistToAdd) {
 PlaylistList.prototype.render = function () {
   var theList = $('#url-list');
   theList.empty();
+
+  if (this.list.length >= 2) {
+    showPlaylistBtn();
+  } else {
+    hidePlaylistBtn();
+  }
 
   if (this.list.length === 0) {
     theList.append(getListItemHTML('Empty!'));

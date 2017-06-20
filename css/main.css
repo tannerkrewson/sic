@@ -21,3 +21,7 @@ body {
 #spotify-login-btn {
   display: none;
 }
+
+#create-playlist-btn {
+  display: none;
+}
