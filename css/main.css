@@ -17,3 +17,7 @@ body {
 #playlist-list {
   display: none;
 }
+
+#spotify-login-btn {
+  display: none;
+}
