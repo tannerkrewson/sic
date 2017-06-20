@@ -111,7 +111,7 @@ function checkForSpotifyAccessToken() {
 		});
 
 		if (hash.error) {
-			console.log(hash.error);
+			console.error(hash.error);
 			return false;
 		} else {
 			hash.token_type === "Bearer";
@@ -174,7 +174,6 @@ function parsePlaylistURL(input) {
 function onUbiquitise(playlistList) {
 	var thisUserId = spotifyApi.thisUser.id;
 	var newSongList = ubiquitiseList(playlistList);
-    console.log(newSongList);
 	if (newSongList.length > 0) {
 		spotifyApi.createPlaylist(thisUserId, {
 			name: playlistList.getSuperPlaylistTitle(),
@@ -183,7 +182,7 @@ function onUbiquitise(playlistList) {
             .then(function(playlist) {
     			spotifyApi.addTracksToPlaylist(thisUserId, playlist.id, newSongList)
     				.then(function() {
-    					console.log('success');
+    					alert('Playlist created! Check your Spotify.');
     				}, onErr);
 		}, onErr);
 	}
@@ -210,11 +209,8 @@ function ubiquitiseList(playlistList) {
 
 function ubiquitiseTwo(listOne, listTwo) {
 	var uriList = [];
-    console.log(listOne.length + ', ' + listTwo.length);
-    console.log('****');
 	for (var i in listOne) {
 		for (var j in listTwo) {
-            console.log(i + ', ' + j);
 			var songOne;
 			if (listOne[i].track) {
 				songOne = listOne[i].track.uri;
