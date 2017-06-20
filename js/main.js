@@ -64,12 +64,11 @@ function setupPlaylistAdding(playlistList) {
 
 		var playlist = spotifyApi.getPlaylist(playlistInfo.userId, playlistInfo.playlistId)
 			.then(function(playlist) {
-				spotifyApi.getPlaylistTracks(playlistInfo.userId, playlistInfo.playlistId)
-					.then(function(data) {
-						playlist.songs = data.items;
-						playlistList.add(playlist);
-						playlistList.render();
-					}, onErr);
+                getSongsOfPlaylist(playlist, function (songList) {
+                    playlist.songs = songList;
+                    playlistList.add(playlist);
+                    playlistList.render();
+                });
 			}, onErr);
 	});
 
@@ -234,6 +233,39 @@ function ubiquitiseTwo(listOne, listTwo) {
 		}
 	}
 	return uriList;
+}
+
+function getSongsOfPlaylist (pl, next) {
+    var total = pl.tracks.total;
+    var firstSetOfSongs = pl.tracks.items;
+
+    if (total <= 100) {
+        next(firstSetOfSongs);
+    } else {
+        getSongsOfPlaylistStartingAt(pl, 100, function (songs) {
+            next(firstSetOfSongs.concat(songs));
+        })
+    }
+}
+
+function getSongsOfPlaylistStartingAt (pl, offset, next, songListSoFar) {
+    if (!songListSoFar) {
+        songListSoFar = [];
+    }
+
+    spotifyApi.getPlaylistTracks(pl.owner.id, pl.id, { offset })
+        .then(function(data) {
+            var theSongs = data.items;
+            songListSoFar =  songListSoFar.concat(theSongs);
+            if (theSongs.length >= 100) {
+                //get more songs!
+                getSongsOfPlaylistStartingAt(pl, offset + 100, next, songListSoFar)
+            } else {
+                next(songListSoFar);
+            }
+        }, function (err) {
+            console.error(err);
+        });
 }
 
 
