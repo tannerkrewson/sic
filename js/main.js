@@ -1,3 +1,5 @@
+var spotifyApi;
+
 const SPOTIFY_CLIENT_ID = '3c982a456c594c39b23403937c5d2343';
 
 function main () {
@@ -9,7 +11,8 @@ function main () {
     playlistList.show();
     setupPlaylistAdding(playlistList);
 
-    var spotifyApi = new SpotifyWebApi();
+    spotifyApi = new SpotifyWebApi();
+    spotifyApi.setAccessToken(spotifyHash.access_token);
 
   } else {
     showSpotifyLoginButton();
@@ -35,9 +38,23 @@ function hidePlaylistOutput () {
 
 function setupPlaylistAdding (playlistList) {
   $('#url-add-btn').click(function () {
-    var playlistToAdd = new Playlist (getURLFromInput());
-    playlistList.add(playlistToAdd);
-    playlistList.render();
+    var inputString = getURLFromInput();
+    var playlistInfo = parsePlaylistURL(inputString);
+
+    if (!playlistInfo) {
+      alert('Invalid playlist URL/URI');
+      return;
+    }
+
+    var playlist = spotifyApi.getPlaylist(playlistInfo.userId, playlistInfo.playlistId)
+      .then(function(playlist) {
+        console.log('User playlist', playlist);
+        playlistList.add(playlist);
+        playlistList.render();
+      }, function(err) {
+        console.error(err);
+        alert('Playlist not found');
+      });
   });
 }
 
@@ -92,6 +109,45 @@ function getURLFromInput () {
   return playlistURL;
 }
 
+function parsePlaylistURL (input) {
+  /* Examples:
+      URL: https://open.spotify.com/user/1235001726/playlist/14mJG2IpKEr0zOxvTroePJ
+      URI: spotify:user:1235001726:playlist:14mJG2IpKEr0zOxvTroePJ
+  */
+  var isURI = input.startsWith('spotify');
+  var isURL = input.startsWith('http');
+
+  var splitChar;
+  if (isURI) {
+    splitChar = ':';
+  } else if (isURL) {
+    splitChar = '/';
+  } else {
+    return false;
+  }
+
+  var userId;
+  var playlistId;
+
+  try {
+    var parts = input.split(splitChar);
+    for (var i = 0; i < parts.length; i++) {
+      if (parts[i] === 'user') {
+        userId = parts[i + 1];
+      }
+      if (parts[i] === 'playlist') {
+        playlistId = parts[i + 1];
+      }
+    }
+    return {
+      userId,
+      playlistId
+    }
+  } catch (e) {
+    return false;
+  }
+}
+
 
 function PlaylistList (id) {
   this.id = id;
@@ -118,17 +174,14 @@ PlaylistList.prototype.render = function () {
     theList.append(getListItemHTML('Empty!'));
   } else {
     for (var i in this.list) {
-      theList.append(getListItemHTML(this.list[i].url));
+      var pl = this.list[i];
+      theList.append(getListItemHTML(pl.name));
     }
   }
 
   function getListItemHTML (inside) {
     return '<li class="list-group-item list-group-item-action">' + inside + '</li>'
   }
-}
-
-function Playlist (url) {
-  this.url = url;
 }
 
 main();
