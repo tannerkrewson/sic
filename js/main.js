@@ -35,8 +35,13 @@ function hidePlaylistOutput () {
   $('#playlist-output').hide();
 }
 
-function showPlaylistBtn () {
-  $('#create-playlist-btn').show();
+function showPlaylistBtn (playlistList) {
+  var playlistBtn = $('#create-playlist-btn');
+  playlistBtn.off();
+  playlistBtn.click(function () {
+    ubiquitiseList(playlistList);
+  });
+  playlistBtn.show();
 }
 
 function hidePlaylistBtn () {
@@ -56,18 +61,24 @@ function setupPlaylistAdding (playlistList) {
 
     var playlist = spotifyApi.getPlaylist(playlistInfo.userId, playlistInfo.playlistId)
       .then(function(playlist) {
-        console.log('User playlist', playlist);
-        playlistList.add(playlist);
-        playlistList.render();
-      }, function(err) {
-        console.error(err);
-        alert('Playlist not found');
-      });
+        spotifyApi.getPlaylistTracks(playlistInfo.userId, playlistInfo.playlistId)
+          .then(function (data) {
+            playlist.songs = data.items;
+            playlistList.add(playlist);
+            playlistList.render();
+          }, onErr);
+      }, onErr);
   });
+
+  function onErr (err) {
+    console.error(err);
+    alert('Playlist not found');
+  }
 }
 
 function showSpotifyLoginButton () {
   var loginBtn = $('#spotify-login-btn');
+  loginBtn.off();
   loginBtn.click(loginToSpotify);
   loginBtn.show();
 }
@@ -156,6 +167,10 @@ function parsePlaylistURL (input) {
   }
 }
 
+function ubiquitiseList (playlistList) {
+
+}
+
 
 function PlaylistList (id) {
   this.id = id;
@@ -179,7 +194,7 @@ PlaylistList.prototype.render = function () {
   theList.empty();
 
   if (this.list.length >= 2) {
-    showPlaylistBtn();
+    showPlaylistBtn(this);
   } else {
     hidePlaylistBtn();
   }
