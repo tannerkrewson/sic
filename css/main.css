@@ -6,6 +6,14 @@ body {
   text-align: center;
 }
 
+#playlist-adder {
+  display: none;
+}
+
 #playlist-output {
+  display: none;
+}
+
+#playlist-list {
   display: none;
 }
