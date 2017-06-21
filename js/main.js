@@ -59,6 +59,13 @@ function setupPlaylistAdding(playlistList) {
 			}, onErr);
 	});
 
+    // for enter key in input
+    $("#url-input").keyup(function(event){
+        if(event.keyCode == 13){
+            $("#url-add-btn").click();
+        }
+    });
+
 	function onErr(err) {
 		console.error(err);
         hideAddPlaylistLoading();
@@ -203,6 +210,8 @@ function onUbiquitise(playlistList) {
                         title: 'Playlist created successfully!',
                         text: 'Check your Spotify; the new playlist should be at the top.',
                         type: 'success'
+                    }).then(function () {
+                        location.reload();
                     });
                 });
 		}, onErr);
