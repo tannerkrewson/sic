@@ -23,6 +23,46 @@ function main() {
 	}
 }
 
+function showPlaylistBtn(playlistList) {
+	var playlistBtn = $('#create-playlist-btn');
+	playlistBtn.off();
+	playlistBtn.click(function() {
+		onUbiquitise(playlistList);
+	});
+	playlistBtn.show();
+}
+
+function setupPlaylistAdding(playlistList) {
+	$('#url-add-btn:enabled').click(function() {
+        console.log('oy!');
+		var inputString = getURLFromInput();
+		var playlistInfo = parsePlaylistURL(inputString);
+
+		if (!playlistInfo) {
+			alert('Invalid playlist URL/URI');
+			return;
+		}
+
+        showLoading();
+
+		var playlist = spotifyApi.getPlaylist(playlistInfo.userId, playlistInfo.playlistId)
+			.then(function(playlist) {
+                getSongsOfPlaylist(playlist, function (songList) {
+                    playlist.songs = songList;
+                    playlistList.add(playlist);
+                    playlistList.render();
+                    hideLoading();
+                });
+			}, onErr);
+	});
+
+	function onErr(err) {
+		console.error(err);
+        hideLoading();
+		alert('Playlist not found');
+	}
+}
+
 function showPlaylistAdder() {
 	$('#playlist-adder').show();
 }
@@ -39,44 +79,8 @@ function hideInstructions() {
 	$('#instructions').hide();
 }
 
-function showPlaylistBtn(playlistList) {
-	var playlistBtn = $('#create-playlist-btn');
-	playlistBtn.off();
-	playlistBtn.click(function() {
-		onUbiquitise(playlistList);
-	});
-	playlistBtn.show();
-}
-
 function hidePlaylistBtn() {
 	$('#create-playlist-btn').hide();
-}
-
-
-function setupPlaylistAdding(playlistList) {
-	$('#url-add-btn').click(function() {
-		var inputString = getURLFromInput();
-		var playlistInfo = parsePlaylistURL(inputString);
-
-		if (!playlistInfo) {
-			alert('Invalid playlist URL/URI');
-			return;
-		}
-
-		var playlist = spotifyApi.getPlaylist(playlistInfo.userId, playlistInfo.playlistId)
-			.then(function(playlist) {
-                getSongsOfPlaylist(playlist, function (songList) {
-                    playlist.songs = songList;
-                    playlistList.add(playlist);
-                    playlistList.render();
-                });
-			}, onErr);
-	});
-
-	function onErr(err) {
-		console.error(err);
-		alert('Playlist not found');
-	}
 }
 
 function showSpotifyLoginButton() {
@@ -303,6 +307,20 @@ function addSongsToPlaylist (userId, playlistId, songList, next) {
             console.error(err);
             alert('Unable to add tracks to the playlist');
         });
+}
+
+function showLoading () {
+    $('.spinner').show();
+    $('#url-add-btn-plus').hide();
+    $('#url-add-btn').prop('disabled', true);
+    $('#url-input').prop('disabled', true);
+}
+
+function hideLoading () {
+    $('.spinner').hide();
+    $('#url-add-btn-plus').show();
+    $('#url-add-btn').prop('disabled', false);
+    $('#url-input').prop('disabled', false);
 }
 
 
