@@ -43,7 +43,7 @@ code {
 /* SpinKit Loading Animation */
 
 .spinner {
-    display: none;
+  display: none;
   width: 25px;
   height: 20px;
   text-align: center;

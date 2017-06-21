@@ -40,7 +40,7 @@
                                 <span class="input-group-btn">
                                     <button class="btn btn-secondary" id="url-add-btn" type="button">
                                         <div id="url-add-btn-plus">+</div>
-                                        <div class="spinner">
+                                        <div id="add-spinner" class="spinner">
                                           <div class="rect1"></div>
                                           <div class="rect2"></div>
                                           <div class="rect3"></div>
@@ -80,7 +80,16 @@
                     </div>
                 </div>
 
-                <button id="create-playlist-btn" type="button" class="btn btn-lg btn-outline-success">Ubiquitise</button>
+                <button id="create-playlist-btn" type="button" class="btn btn-lg btn-outline-success">
+                    <div id="create-playlist-btn-text">
+                        Ubiquitise
+                    </div>
+                    <div id="create-spinner" class="spinner">
+                      <div class="rect1"></div>
+                      <div class="rect2"></div>
+                      <div class="rect3"></div>
+                    </div>
+                </button>
 
                 <br><hr>
 				<footer>

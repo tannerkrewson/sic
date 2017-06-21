@@ -26,7 +26,7 @@ function main() {
 function showPlaylistBtn(playlistList) {
 	var playlistBtn = $('#create-playlist-btn');
 	playlistBtn.off();
-	playlistBtn.click(function() {
+	$('#create-playlist-btn:enabled').click(function() {
 		onUbiquitise(playlistList);
 	});
 	playlistBtn.show();
@@ -46,7 +46,7 @@ function setupPlaylistAdding(playlistList) {
 			return;
 		}
 
-        showLoading();
+        showAddPlaylistLoading();
 
 		var playlist = spotifyApi.getPlaylist(playlistInfo.userId, playlistInfo.playlistId)
 			.then(function(playlist) {
@@ -54,14 +54,14 @@ function setupPlaylistAdding(playlistList) {
                     playlist.songs = songList;
                     playlistList.add(playlist);
                     playlistList.render();
-                    hideLoading();
+                    hideAddPlaylistLoading();
                 });
 			}, onErr);
 	});
 
 	function onErr(err) {
 		console.error(err);
-        hideLoading();
+        hideAddPlaylistLoading();
         swal({
             title: 'Playlist not found',
             text: 'Make sure the playlist exists!',
@@ -185,6 +185,8 @@ function parsePlaylistURL(input) {
 }
 
 function onUbiquitise(playlistList) {
+    showCreatePlaylistLoading();
+
 	var thisUserId = spotifyApi.thisUser.id;
 	var newSongList = ubiquitiseList(playlistList);
     newSongList = getListOfURIsFromListOfSongs(newSongList);
@@ -196,6 +198,7 @@ function onUbiquitise(playlistList) {
 		})
             .then(function(playlist) {
                 addSongsToPlaylist(thisUserId, playlist.id, newSongList, function () {
+                    hideCreatePlaylistLoading();
                     swal({
                         title: 'Playlist created successfully!',
                         text: 'Check your Spotify; the new playlist should be at the top.',
@@ -214,7 +217,7 @@ function onUbiquitise(playlistList) {
 
 	function onErr(err) {
 		console.error(err);
-		swal('Unable to create playlist');
+        hideCreatePlaylistLoading();
         swal({
             title: 'Unable to create playlist',
             type: 'error'
@@ -342,22 +345,35 @@ function addSongsToPlaylist (userId, playlistId, songList, next) {
             }
         }, function (err) {
             console.error(err);
+            hideCreatePlaylistLoading();
             swal('Unable to add tracks to the playlist');
         });
 }
 
-function showLoading () {
-    $('.spinner').show();
+function showAddPlaylistLoading () {
+    $('#add-spinner').show();
     $('#url-add-btn-plus').hide();
     $('#url-add-btn').prop('disabled', true);
     $('#url-input').prop('disabled', true);
 }
 
-function hideLoading () {
-    $('.spinner').hide();
+function hideAddPlaylistLoading () {
+    $('#add-spinner').hide();
     $('#url-add-btn-plus').show();
     $('#url-add-btn').prop('disabled', false);
     $('#url-input').prop('disabled', false);
+}
+
+function showCreatePlaylistLoading () {
+    $('#create-spinner').show();
+    $('#create-playlist-btn-text').hide();
+    $('#create-playlist-btn').prop('disabled', true);
+}
+
+function hideCreatePlaylistLoading () {
+    $('#create-spinner').hide();
+    $('#create-playlist-btn-text').show();
+    $('#create-playlist-btn').prop('disabled', false);
 }
 
 
