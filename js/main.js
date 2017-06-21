@@ -19,7 +19,7 @@ function main() {
 		});
 
 	} else {
-		showSpotifyLoginButton();
+		showLoginPage();
 	}
 }
 
@@ -34,12 +34,15 @@ function showPlaylistBtn(playlistList) {
 
 function setupPlaylistAdding(playlistList) {
 	$('#url-add-btn:enabled').click(function() {
-        console.log('oy!');
 		var inputString = getURLFromInput();
 		var playlistInfo = parsePlaylistURL(inputString);
 
 		if (!playlistInfo) {
-			alert('Invalid playlist URL/URI');
+            swal({
+                title: 'Invalid playlist URL/URI',
+                text: 'Check the instructions on how to find the URL of a playlist.',
+                type: 'error'
+            });
 			return;
 		}
 
@@ -59,7 +62,11 @@ function setupPlaylistAdding(playlistList) {
 	function onErr(err) {
 		console.error(err);
         hideLoading();
-		alert('Playlist not found');
+        swal({
+            title: 'Playlist not found',
+            text: 'Make sure the playlist exists!',
+            type: 'error'
+        });
 	}
 }
 
@@ -83,11 +90,13 @@ function hidePlaylistBtn() {
 	$('#create-playlist-btn').hide();
 }
 
-function showSpotifyLoginButton() {
+function showLoginPage() {
 	var loginBtn = $('#spotify-login-btn');
 	loginBtn.off();
 	loginBtn.click(loginToSpotify);
 	loginBtn.show();
+
+    $('#login-info').show();
 }
 
 function loginToSpotify() {
@@ -185,16 +194,29 @@ function onUbiquitise(playlistList) {
 		})
             .then(function(playlist) {
                 addSongsToPlaylist(thisUserId, playlist.id, newSongList, function () {
-                    alert('Playlist created successfully! Check your Spotify.');
+                    swal({
+                        title: 'Playlist created successfully!',
+                        text: 'Check your Spotify; the new playlist should be at the top.',
+                        type: 'success'
+                    });
                 });
 		}, onErr);
 	} else {
-        alert('The selected playlists have no songs in common.');
+        swal({
+            title: 'The selected playlists have no songs in common.',
+            text: 'Try selecting fewer playlists.',
+            type: 'warning'
+        });
+
     }
 
 	function onErr(err) {
 		console.error(err);
-		alert('Unable to create playlist');
+		swal('Unable to create playlist');
+        swal({
+            title: 'Unable to create playlist',
+            type: 'error'
+        });
 	}
 }
 
@@ -305,7 +327,7 @@ function addSongsToPlaylist (userId, playlistId, songList, next) {
             }
         }, function (err) {
             console.error(err);
-            alert('Unable to add tracks to the playlist');
+            swal('Unable to add tracks to the playlist');
         });
 }
 

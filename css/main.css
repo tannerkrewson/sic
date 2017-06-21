@@ -28,6 +28,10 @@ body {
     text-align: center;
 }
 
+#login-info {
+    display: none;
+}
+
 p {
     text-align: left;
 }

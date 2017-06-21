@@ -8,19 +8,26 @@
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-	<link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" integrity="sha256-iXUYfkbVl5itd4bAkFH5mjMEN5ld9t3OHvXX3IU8UxU=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
 	<div class="main-content">
 		<h1>Spotify Ubiquitous Playlist Creator</h1>
-		<br><br>
 
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
-
-                <button id="spotify-login-btn" type="button" class="btn btn-success">Sign into Spotify</button>
+                <div id="login-info" class="lead">
+                    Select a few Spotify playlists, and get back a new playlist
+                    containing only the songs that are in all of the selected
+                    playlists.
+                </div>
+                <br><br>
+                <button id="spotify-login-btn" type="button" class="btn btn-success">
+                    Login to Spotify
+                </button>
 
                 <div class="row">
                     <div class="col-xl-7">
@@ -45,8 +52,8 @@
                             <label>Instructions:</label>
                             <div class="list-group-item">
                                 <p>
-                                    To get the link to a playlist, right click on it, and select
-                                    <code>Share</code>. Then, click
+                                    To get the link to a playlist, right click on it in
+                                    Spotify, and select <code>Share</code>. Then, click
                                     <code>Copy Link to Clipboard</code>. You may also enter a
                                     playlist's URI in the box.
                                 </p>
@@ -73,9 +80,14 @@
 
                 <button id="create-playlist-btn" type="button" class="btn btn-lg btn-outline-success">Ubiquitise</button>
 
-                <br><br><hr>
-				<footer>SUPC by Tanner Krewson
+                <br><hr>
+				<footer>
+                    Spotify Ubiquitous Playlist Creator by Tanner Krewson
 					<br>
+                    <a href="https://github.com/tannerkrewson/spotify-ubiquitous-playlist-creator" target="_blank">
+                        View on GitHub
+                    </a>
+                    |
 					<a href="http://www.tannerkrewson.com/" target="_blank">www.tannerkrewson.com</a>
 				</footer>
 			</div>
@@ -90,7 +102,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
-	<script src="https://cdn.rawgit.com/JMPerez/spotify-web-api-js/v0.22.0/src/spotify-web-api.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js" integrity="sha256-egVvxkq6UBCQyKzRBrDHu8miZ5FOaVrjSqQqauKglKc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.rawgit.com/JMPerez/spotify-web-api-js/v0.22.0/src/spotify-web-api.js"></script>
 	<script src="js/main.js"></script>
 </body>
 
