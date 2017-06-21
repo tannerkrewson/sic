@@ -11,10 +11,6 @@ body {
     display: none;
 }
 
-#playlist-output {
-    display: none;
-}
-
 #playlist-list {
     display: none;
 }
@@ -25,4 +21,17 @@ body {
 
 #create-playlist-btn {
     display: none;
+}
+
+#instructions {
+    display: none;
+    text-align: center;
+}
+
+p {
+    text-align: left;
+}
+
+code {
+    color: #1db954;
 }

@@ -20,41 +20,53 @@
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
 
-				<button id="spotify-login-btn" type="button" class="btn btn-success">Sign into Spotify</button>
+                <button id="spotify-login-btn" type="button" class="btn btn-success">Sign into Spotify</button>
 
-				<div id="playlist-adder">
-					<label for="url-input">Add a playlist:</label>
-					<div class="input-group">
-						<input type="text" class="form-control" id="url-input" placeholder="">
-						<span class="input-group-btn">
-                            <button class="btn btn-secondary" id="url-add-btn" type="button">+</button>
-                        </span>
-					</div>
-					<br><br>
-				</div>
+                <div class="row">
+                    <div class="col-xl-7">
+                        <div id="playlist-adder">
+                            <label for="url-input">Add a playlist:</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="url-input" placeholder="">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-secondary" id="url-add-btn" type="button">+</button>
+                                </span>
+                            </div>
+                            <br><br>
+                        </div>
+                        <div id="instructions">
+                            <label>Instructions:</label>
+                            <div class="list-group-item">
+                                <p>
+                                    To get the link to a playlist, right click on it, and select
+                                    <code>Share</code>. Then, click
+                                    <code>Copy Link to Clipboard</code>. You may also enter a
+                                    playlist's URI in the box.
+                                </p>
+                                <p>
+                                    The <code>Ubiquitise</code> button will appear when two or more
+                                    playlists have been added. When clicked, a new playlist will be
+                                    created in your Spotify account containing only songs that are
+                                    present in all of the playlists that were added.
+                                </p>
+                            </div>
+                            <br><br>
+                        </div>
+                    </div>
+                    <div class="col-xl-5">
+                        <div id="playlist-list">
+                            <label for="url-list">Playlist list:</label>
+                            <ul class="list-group" id="url-list">
+                                <li class="list-group-item list-group-item-action">Empty!</li>
+                            </ul>
+                            <br><br>
+                        </div>
+                    </div>
+                </div>
 
-				<div id="playlist-output">
-					<label>Ubiquitous Playlist:</label>
-					<div class="card">
-						<div class="card-block">
-							<a id="url-output"></a>
-						</div>
-					</div>
-					<br><br>
-				</div>
+                <button id="create-playlist-btn" type="button" class="btn btn-lg btn-outline-success">Ubiquitise</button>
 
-				<div id="playlist-list">
-					<label for="url-list">Playlist list:</label>
-					<ul class="list-group" id="url-list">
-						<li class="list-group-item list-group-item-action">Empty!</li>
-					</ul>
-					<br><br>
-				</div>
-
-				<button id="create-playlist-btn" type="button" class="btn btn-lg btn-outline-success">Ubiquitise</button>
-
-				<br><br>
-				<hr>
+                <br><br><hr>
 				<footer>SUPC by Tanner Krewson
 					<br>
 					<a href="http://www.tannerkrewson.com/" target="_blank">www.tannerkrewson.com</a>

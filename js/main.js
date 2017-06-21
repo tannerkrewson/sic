@@ -7,6 +7,7 @@ function main() {
 
 	if (spotifyHash) {
 		showPlaylistAdder();
+        showInstructions();
 		playlistList = new PlaylistList('#playlist-list');
 		playlistList.show();
 		setupPlaylistAdding(playlistList);
@@ -30,12 +31,12 @@ function hidePlaylistAdder() {
 	$('#playlist-adder').hide();
 }
 
-function showPlaylistOutput() {
-	$('#playlist-output').show();
+function showInstructions() {
+	$('#instructions').show();
 }
 
-function hidePlaylistOutput() {
-	$('#playlist-output').hide();
+function hideInstructions() {
+	$('#instructions').hide();
 }
 
 function showPlaylistBtn(playlistList) {
