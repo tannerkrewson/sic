@@ -1,27 +1,28 @@
 body {
-  padding-top: 1rem;
+    padding-top: 1rem;
 }
+
 .main-content {
-  padding: 2rem 1.5rem;
-  text-align: center;
+    padding: 2rem 1.5rem;
+    text-align: center;
 }
 
 #playlist-adder {
-  display: none;
+    display: none;
 }
 
 #playlist-output {
-  display: none;
+    display: none;
 }
 
 #playlist-list {
-  display: none;
+    display: none;
 }
 
 #spotify-login-btn {
-  display: none;
+    display: none;
 }
 
 #create-playlist-btn {
-  display: none;
+    display: none;
 }
