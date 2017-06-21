@@ -255,7 +255,17 @@ function ubiquitiseTwo(listOne, listTwo) {
                 }
             }
 
-			if ((sameURI || sameISRC) && notALocalSong) {
+            //this is to remedy songs that have "Remastered" and such appended to the title
+            //looking at you Bohemian Rhapsody - Remastered 2011
+            var sameTitleAndArtist = false;
+            if (!sameURI && !sameISRC) {
+                var sameArtist = songOne.artists[0].uri === songTwo.artists[0].uri;
+                var roughlySameTitle = songOne.name.startsWith(songTwo.name) ||
+                                       songTwo.name.startsWith(songOne.name);
+                sameTitleAndArtist = sameArtist && roughlySameTitle;
+            }
+
+			if ((sameURI || sameISRC || sameTitleAndArtist) && notALocalSong) {
 				songList.push(listOne[i]);
 			}
 
