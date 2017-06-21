@@ -15,7 +15,7 @@ function main() {
 		spotifyApi.setAccessToken(spotifyHash.access_token);
 		spotifyApi.getMe().then(function(data) {
 			spotifyApi.thisUser = data;
-		})
+		});
 
 	} else {
 		showSpotifyLoginButton();
@@ -179,12 +179,13 @@ function onUbiquitise(playlistList) {
 			description: 'Made here: ' + window.location.href
 		})
             .then(function(playlist) {
-    			spotifyApi.addTracksToPlaylist(thisUserId, playlist.id, newSongList)
-    				.then(function() {
-    					alert('Playlist created! Check your Spotify.');
-    				}, onErr);
+                addSongsToPlaylist(thisUserId, playlist.id, newSongList, function () {
+                    alert('Playlist created successfully! Check your Spotify.');
+                });
 		}, onErr);
-	}
+	} else {
+        alert('The selected playlists have no songs in common.');
+    }
 
 	function onErr(err) {
 		console.error(err);
@@ -226,7 +227,11 @@ function ubiquitiseTwo(listOne, listTwo) {
 
 			//TODO: check to see if songs have same artist and name, but are
 			//      but are different versions/album/etc.
-			if (songOne === songTwo) {
+
+            var sameSong = songOne === songTwo;
+            var notALocalSong = !songOne.startsWith('spotify:local');
+
+			if (sameSong && notALocalSong) {
 				uriList.push(songOne);
 			}
 
@@ -261,10 +266,41 @@ function getSongsOfPlaylistStartingAt (pl, offset, next, songListSoFar) {
                 //get more songs!
                 getSongsOfPlaylistStartingAt(pl, offset + 100, next, songListSoFar)
             } else {
+                //all of the songs have been added, we're done!
                 next(songListSoFar);
             }
         }, function (err) {
             console.error(err);
+        });
+}
+
+function addSongsToPlaylist (userId, playlistId, songList, next) {
+    var songsToAdd;
+    var isLastRun = songList.length <= 100;
+
+    if (!isLastRun) {
+        //get the first 100 songs that should be added on this run
+        songsToAdd = songList.slice(0, 100);
+
+        //remove the added songs from the list of songs that have yet
+        //to be added
+        songList = songList.slice(100)
+    } else {
+        //add all remaining songs
+        songsToAdd = songList;
+    }
+    //get the first 100 songs that should be added on this run
+
+    spotifyApi.addTracksToPlaylist(userId, playlistId, songsToAdd)
+        .then(function() {
+            if (!isLastRun) {
+                addSongsToPlaylist(userId, playlistId, songList, next);
+            } else {
+                next();
+            }
+        }, function (err) {
+            console.error(err);
+            alert('Unable to add tracks to the playlist');
         });
 }
 
