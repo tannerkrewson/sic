@@ -187,6 +187,8 @@ function parsePlaylistURL(input) {
 function onUbiquitise(playlistList) {
 	var thisUserId = spotifyApi.thisUser.id;
 	var newSongList = ubiquitiseList(playlistList);
+    newSongList = getListOfURIsFromListOfSongs(newSongList);
+
 	if (newSongList.length > 0) {
 		spotifyApi.createPlaylist(thisUserId, {
 			name: playlistList.getSuperPlaylistTitle(),
@@ -235,36 +237,39 @@ function ubiquitiseList(playlistList) {
 }
 
 function ubiquitiseTwo(listOne, listTwo) {
-	var uriList = [];
+	var songList = [];
 	for (var i in listOne) {
 		for (var j in listTwo) {
-			var songOne;
-			if (listOne[i].track) {
-				songOne = listOne[i].track.uri;
-			} else {
-				songOne = listOne[i];
-			}
+			var songOne = listOne[i].track;
+		    var songTwo = listTwo[j].track;
 
-			var songTwo;
-			if (listTwo[j].track) {
-				songTwo = listTwo[j].track.uri;
-			} else {
-				songTwo = listTwo[j];
-			}
+            var sameURI = songOne.uri === songTwo.uri;
+            var notALocalSong = !songOne.uri.startsWith('spotify:local');
+            var sameISRC = false;
 
-			//TODO: check to see if songs have same artist and name, but are
-			//      but are different versions/album/etc.
+            var bothHaveExternalIds = songOne.external_ids && songTwo.external_ids;
+            if (!sameURI && bothHaveExternalIds) {
+                var isISRCValid = !!songOne.external_ids.isrc && !!songTwo.external_ids.isrc;
+                if (isISRCValid) {
+                    sameISRC = songOne.external_ids.isrc === songTwo.external_ids.isrc;
+                }
+            }
 
-            var sameSong = songOne === songTwo;
-            var notALocalSong = !songOne.startsWith('spotify:local');
-
-			if (sameSong && notALocalSong) {
-				uriList.push(songOne);
+			if ((sameURI || sameISRC) && notALocalSong) {
+				songList.push(listOne[i]);
 			}
 
 		}
 	}
-	return uriList;
+	return songList;
+}
+
+function getListOfURIsFromListOfSongs (listOfSongs) {
+    var uriList = [];
+    for (var i in listOfSongs) {
+        uriList.push(listOfSongs[i].track.uri);
+    }
+    return uriList;
 }
 
 function getSongsOfPlaylist (pl, next) {
