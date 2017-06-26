@@ -3,6 +3,13 @@ var spotifyApi;
 const SPOTIFY_CLIENT_ID = '3c982a456c594c39b23403937c5d2343';
 
 function main() {
+
+	//add the footer
+	$('.footer').append(getFooter(
+		'Spotify Ubiquitous Playlist Creator',
+		'https://github.com/tannerkrewson/spotify-ubiquitous-playlist-creator'
+	));
+
 	var spotifyHash = checkForSpotifyAccessToken();
 
 	if (spotifyHash) {
