@@ -203,6 +203,7 @@ function onUbiquitise(playlistList) {
 
 	var thisUserId = spotifyApi.thisUser.id;
 	var newSongList = ubiquitiseList(playlistList);
+	newSongList = removeDuplicates(newSongList);
     newSongList = getListOfURIsFromListOfSongs(newSongList);
 
 	if (newSongList.length > 0) {
@@ -294,6 +295,27 @@ function areSameSong (songOne, songTwo) {
 	}
 	
 	return (sameURI || sameISRC || sameTitleAndArtist) && notALocalSong;
+}
+
+function removeDuplicates (songList) {
+	var newSongList = [];
+	
+	for (var i in songList) {
+		var isSongADupe = false;
+		for (var j in newSongList) {
+			var songOne = songList[i].track;
+		    var songTwo = newSongList[j].track;
+			
+			isSongADupe = areSameSong(songOne, songTwo);
+			if (isSongADupe) {
+				break;
+			}
+		}
+		if (!isSongADupe) {
+			newSongList.push(songList[i]);
+		}
+	}
+	return newSongList;
 }
 
 function getListOfURIsFromListOfSongs (listOfSongs) {
