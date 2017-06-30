@@ -262,35 +262,38 @@ function ubiquitiseTwo(listOne, listTwo) {
 			var songOne = listOne[i].track;
 		    var songTwo = listTwo[j].track;
 
-            var sameURI = songOne.uri === songTwo.uri;
-            var notALocalSong = !songOne.uri.startsWith('spotify:local');
-            var sameISRC = false;
-
-            var bothHaveExternalIds = songOne.external_ids && songTwo.external_ids;
-            if (!sameURI && bothHaveExternalIds) {
-                var isISRCValid = !!songOne.external_ids.isrc && !!songTwo.external_ids.isrc;
-                if (isISRCValid) {
-                    sameISRC = songOne.external_ids.isrc === songTwo.external_ids.isrc;
-                }
-            }
-
-            //this is to remedy songs that have "Remastered" and such appended to the title
-            //looking at you Bohemian Rhapsody - Remastered 2011
-            var sameTitleAndArtist = false;
-            if (!sameURI && !sameISRC) {
-                var sameArtist = songOne.artists[0].uri === songTwo.artists[0].uri;
-                var roughlySameTitle = songOne.name.startsWith(songTwo.name) ||
-                                       songTwo.name.startsWith(songOne.name);
-                sameTitleAndArtist = sameArtist && roughlySameTitle;
-            }
-
-			if ((sameURI || sameISRC || sameTitleAndArtist) && notALocalSong) {
+			if (areSameSong(songOne, songTwo)) {
 				songList.push(listOne[i]);
 			}
-
 		}
 	}
 	return songList;
+}
+
+function areSameSong (songOne, songTwo) {
+	var sameURI = songOne.uri === songTwo.uri;
+	var notALocalSong = !songOne.uri.startsWith('spotify:local');
+	var sameISRC = false;
+
+	var bothHaveExternalIds = songOne.external_ids && songTwo.external_ids;
+	if (!sameURI && bothHaveExternalIds) {
+		var isISRCValid = !!songOne.external_ids.isrc && !!songTwo.external_ids.isrc;
+		if (isISRCValid) {
+			sameISRC = songOne.external_ids.isrc === songTwo.external_ids.isrc;
+		}
+	}
+
+	//this is to remedy songs that have "Remastered" and such appended to the title
+	//looking at you Bohemian Rhapsody - Remastered 2011
+	var sameTitleAndArtist = false;
+	if (!sameURI && !sameISRC) {
+		var sameArtist = songOne.artists[0].uri === songTwo.artists[0].uri;
+		var roughlySameTitle = songOne.name.startsWith(songTwo.name) ||
+							   songTwo.name.startsWith(songOne.name);
+		sameTitleAndArtist = sameArtist && roughlySameTitle;
+	}
+	
+	return (sameURI || sameISRC || sameTitleAndArtist) && notALocalSong;
 }
 
 function getListOfURIsFromListOfSongs (listOfSongs) {
