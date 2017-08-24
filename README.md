@@ -1,6 +1,6 @@
-# Spotify Ubiquitous Playlist Creator
+# Spotify-in-Common
 
-**Try it out: www.tannerkrewson.com/spotify-ubiquitous-playlist-creator/**
+**Try it out: www.tannerkrewson.com/sic/**
 
 Select a few Spotify playlists, and get back a new playlist containing only the songs that are in all of the selected playlists.
 

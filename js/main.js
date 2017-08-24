@@ -6,8 +6,8 @@ function main() {
 
 	//add the footer
 	$('footer').append(getFooter(
-		'Spotify Ubiquitous Playlist Creator',
-		'https://github.com/tannerkrewson/spotify-ubiquitous-playlist-creator'
+		'Spotify-in-Common',
+		'https://github.com/tannerkrewson/sic'
 	));
 
 	var spotifyHash = checkForSpotifyAccessToken();
@@ -293,19 +293,19 @@ function areSameSong (songOne, songTwo) {
 							   songTwo.name.startsWith(songOne.name);
 		sameTitleAndArtist = sameArtist && roughlySameTitle;
 	}
-	
+
 	return (sameURI || sameISRC || sameTitleAndArtist) && notALocalSong;
 }
 
 function removeDuplicates (songList) {
 	var newSongList = [];
-	
+
 	for (var i in songList) {
 		var isSongADupe = false;
 		for (var j in newSongList) {
 			var songOne = songList[i].track;
 		    var songTwo = newSongList[j].track;
-			
+
 			isSongADupe = areSameSong(songOne, songTwo);
 			if (isSongADupe) {
 				break;
