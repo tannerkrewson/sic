@@ -3,13 +3,6 @@ var spotifyApi;
 const SPOTIFY_CLIENT_ID = '3c982a456c594c39b23403937c5d2343';
 
 function main() {
-
-	//add the footer
-	$('footer').append(getFooter(
-		'Spotify-in-Common',
-		'https://github.com/tannerkrewson/sic'
-	));
-
 	var spotifyHash = checkForSpotifyAccessToken();
 
 	if (spotifyHash) {

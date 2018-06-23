@@ -6,6 +6,16 @@ Select a few Spotify playlists, and get back a new playlist containing only the 
 
 ## How it works
 
-The algorithm compares every song. First, it check to see if the URI of the songs being compared is identical. However, there are duplicates of the same song with different URIs on Spotify. It is common with compiliations, remasters, and explicit/clean versions. So, it also compares the songs by their International Standard Recording Code (ISRC). If that fails, it will proceed to compare the Artist and Title of the songs. It checks to see if the titles of the two songs being the same, so `Bohemian Rhapsody` and `Bohemian Rhapsody - Remastered 2011` will be counted as the same song, as long as they are both by the same artist, in this case, `Queen`.
+For the history of Spotify-in-Common and how it works, see the [readme](https://github.com/tannerkrewson/mutual-music#mutual-music) of its successor, [Mutual Music](https://www.tannerkrewson.com/mutual-music/).
 
-When I began working with the Spotify API, I quickly realized that if you request the list of songs on a playlist that has more than 100 songs, it will only give you the first 100. The same issue occurs with adding songs to a playlist, both of which I had to do to make the app work as intended. So, I figured out that it allows you to specify an offset to the request, allowing you to receive songs that are past the 100th song mark. As a result, the app has to make a seperate request every 100 songs, combine the songs into one big list, and continue until it has received all of the songs in the playlist. Therefore, the implementation will make `ceiling( numberOfSongs / 100)` seperate requests to Spotify for each playlist to get all of the tracks, and then again to create the new playlist.
+Although Mutual Music is the more polished of the two, Spotify-in-Common is a more powerful tool as it allows you to select the exact playlists that will be compared, while Mutual Music focuses more on simplicity.
+
+### What makes two songs identical
+
+The algorithm compares every song. First, it checks to see if the URI of the songs being compared is identical. However, there are duplicates of the same song with different URIs on Spotify. It is common with compilations, remasters, and explicit/clean versions. So, it also compares the songs by their International Standard Recording Code (ISRC). If that fails, it will proceed to compare the Artist and Title of the songs. It checks to see if the titles of the two songs being the same, so `Bohemian Rhapsody` and `Bohemian Rhapsody - Remastered 2011` will be counted as the same song, as long as they are both by the same artist, in this case, `Queen`.
+
+This could backfire if a single artist has two songs with titles called something like `Game` and `Gameboy`, but I believe the tradeoff of a few false positives is worth the potential for way more false negatives. You can always delete songs from the generated playlist, but if a song is missed, you can never find it.
+
+## Development
+
+Spotify-in-Common is very simple, and doesn't require an `npm install`. You will need to use a local static server  like [http-server](https://github.com/indexzero/http-server), or the Spotify API will not function correctly.
