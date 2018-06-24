@@ -246,12 +246,6 @@ function onUbiquitise(playlistList) {
 			});
 			
 			gtag("event", "generate");
-			gtag("event", "mutual_count", {
-				event_label: newSongList.length
-			});
-			gtag("event", "playlist_count", {
-				event_label: playlistList.list.length
-			});
 		}, onErr);
 	} else {
         swal({
@@ -261,7 +255,17 @@ function onUbiquitise(playlistList) {
 		});
 		gtag("event", "mutual_none");
 
-    }
+	}
+	
+	gtag("event", "mutual_count", {
+		event_label: newSongList.length
+	});
+	gtag("event", "input_playlists", {
+		event_label: playlistList.list.length
+	});
+	gtag("event", "min_appear", {
+		event_label: minimumAppearances
+	});
 
 	function onErr(err) {
 		console.error(err);
