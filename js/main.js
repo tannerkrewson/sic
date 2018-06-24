@@ -204,24 +204,33 @@ function onUbiquitise(playlistList) {
 			name: playlistList.getSuperPlaylistTitle(),
 			description: 'Made here: ' + window.location.href
 		})
-            .then(function(playlist) {
-                addSongsToPlaylist(thisUserId, playlist.id, newSongList, function () {
-                    hideCreatePlaylistLoading();
-                    swal({
-                        title: 'Playlist created successfully!',
-                        text: 'Check your Spotify; the new playlist should be at the top.',
-                        type: 'success'
-                    }).then(function () {
-                        location.reload();
-                    });
-                });
+		.then(function(playlist) {			
+			addSongsToPlaylist(thisUserId, playlist.id, newSongList, function () {
+				hideCreatePlaylistLoading();
+				swal({
+					title: 'Playlist created successfully!',
+					text: 'Check your Spotify; the new playlist should be at the top.',
+					type: 'success'
+				}).then(function () {
+					location.reload();
+				});
+			});
+			
+			gtag("event", "generate");
+			gtag("event", "mutual_count", {
+				event_label: newSongList.length
+			});
+			gtag("event", "playlist_count", {
+				event_label: playlistList.list.length
+			});
 		}, onErr);
 	} else {
         swal({
             title: 'The selected playlists have no songs in common.',
             text: 'Try selecting fewer playlists.',
             type: 'warning'
-        });
+		});
+		gtag("event", "mutual_none");
 
     }
 
@@ -231,7 +240,10 @@ function onUbiquitise(playlistList) {
         swal({
             title: 'Unable to create playlist',
             type: 'error'
-        });
+		});
+		gtag("event", "generate_error", {
+			event_label: err
+		});
 	}
 }
 
@@ -308,6 +320,9 @@ function removeDuplicates (songList) {
 			newSongList.push(songList[i]);
 		}
 	}
+	gtag("event", "dupe_count", {
+		event_label: songList.length - newSongList.length
+	});
 	return newSongList;
 }
 
