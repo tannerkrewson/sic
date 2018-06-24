@@ -468,10 +468,10 @@ PlaylistList.prototype.render = function() {
 					showCancelButton: true,
 					confirmButtonText: 'Yes, remove it'
 				}).then((result) => {
-					if (result) {
+					if (result.value) {
 						// remove it from the array
 						this.list.splice(i, 1);
-						
+
 						this.render();
 					}
 				}).catch((err) => {
