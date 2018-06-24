@@ -35,6 +35,16 @@ code {
     color: #1db954;
 }
 
+#mutual-figure {
+    display: none;
+    padding: 12px 12px 18px 12px;
+}
+
+#mutual-figure-input {
+    width: 4em;
+    display: inline;
+}
+
 /* SpinKit Loading Animation */
 
 .spinner {

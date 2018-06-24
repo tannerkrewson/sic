@@ -7,7 +7,6 @@ function main() {
 
 	if (spotifyHash) {
 		showPlaylistAdder();
-        showInstructions();
 		playlistList = new PlaylistList('#playlist-list');
 		playlistList.show();
 		setupPlaylistAdding(playlistList);
@@ -78,19 +77,13 @@ function setupPlaylistAdding(playlistList) {
 }
 
 function showPlaylistAdder() {
+	$('#mutual-figure').show();
 	$('#playlist-adder').show();
 }
 
 function hidePlaylistAdder() {
+	$('#mutual-figure').hide();
 	$('#playlist-adder').hide();
-}
-
-function showInstructions() {
-	$('#instructions').show();
-}
-
-function hideInstructions() {
-	$('#instructions').hide();
 }
 
 function hidePlaylistBtn() {
