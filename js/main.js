@@ -231,7 +231,7 @@ function onUbiquitise(playlistList) {
 	if (newSongList.length > 0) {
 		spotifyApi.createPlaylist(thisUserId, {
 			name: playlistList.getSuperPlaylistTitle(),
-			description: 'Made here: ' + window.location.href
+			description: 'Made with Spotify-in-Common: www.tannerkrewson.com/sic'
 		})
 		.then(function(playlist) {			
 			addSongsToPlaylist(thisUserId, playlist.id, newSongList, function () {
