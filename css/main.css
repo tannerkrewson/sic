@@ -27,6 +27,10 @@ body {
     display: none;
 }
 
+#login-info .card {
+    margin: 1em;
+}
+
 p {
     text-align: left;
 }
