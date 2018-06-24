@@ -461,7 +461,7 @@ PlaylistList.prototype.render = function() {
 			let elem = $(getListItemHTML(pl.name));
 			theList.append(elem);
 			
-			elem.click(function() {
+			elem.click(() => {
 				swal({
 					title: 'Remove ' + pl.name + '?',
 					type: 'warning',
@@ -469,7 +469,10 @@ PlaylistList.prototype.render = function() {
 					confirmButtonText: 'Yes, remove it'
 				}).then((result) => {
 					if (result) {
-						swal('would if i could, boss!');
+						// remove it from the array
+						this.list.splice(i, 1);
+						
+						this.render();
 					}
 				}).catch((err) => {
 					console.error(err);
