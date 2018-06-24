@@ -16,21 +16,23 @@
 
 <body>
 	<div class="main-content">
-		<h1>Spotify-in-Common</h1>
+		<h2>Spotify-in-Common</h2>
 
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
-                <div id="login-info" class="lead">
-                    Select a few Spotify playlists, and get back a new playlist
-                    containing only the songs that are in all of the selected
-                    playlists.
+                <div id="login-info">
+                    <div class="lead">
+                        Select two or more Spotify playlists, and get back a new playlist 
+                        with only the songs the selected playlists have in common.
+                    </div>
+                    <br><br>
+                    <button id="spotify-login-btn" type="button" class="btn btn-success">
+                        Login to Spotify
+                    </button>
+                    <br>
                 </div>
-                <br><br>
-                <button id="spotify-login-btn" type="button" class="btn btn-success">
-                    Login to Spotify
-                </button>
-
+                <br>
                 <div class="row">
                     <div class="col-xl-7">
                         <div id="playlist-adder">
@@ -66,7 +68,7 @@
                                     present in all of the playlists that were added.
                                 </p>
                             </div>
-                            <br><br>
+                            <br>
                         </div>
                     </div>
                     <div class="col-xl-5">
@@ -75,7 +77,7 @@
                             <ul class="list-group" id="url-list">
                                 <li class="list-group-item list-group-item-action">Empty!</li>
                             </ul>
-                            <br><br>
+                            <br>
                         </div>
                     </div>
                 </div>
@@ -91,7 +93,7 @@
                     </div>
                 </button>
 
-                <br><hr>
+                <hr>
                 <footer>
                     Spotify-in-Common by
                     <a href="https://www.tannerkrewson.com/" target="_blank">
