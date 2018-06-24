@@ -474,6 +474,9 @@ PlaylistList.prototype.render = function() {
 
 						this.render();
 					}
+					gtag("event", "remove_playlist", {
+						event_label: result.value ? "remove" : "cancel"
+					});
 				}).catch((err) => {
 					console.error(err);
 				});
