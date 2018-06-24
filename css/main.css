@@ -35,12 +35,13 @@ code {
     color: #1db954;
 }
 
-#mutual-figure {
+#mutual-appear {
     display: none;
     padding: 12px 12px 18px 12px;
+    margin-bottom: 2em;
 }
 
-#mutual-figure-input {
+#mutual-appear-input {
     width: 4em;
     display: inline;
 }

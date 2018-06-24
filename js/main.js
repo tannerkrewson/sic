@@ -10,6 +10,7 @@ function main() {
 		playlistList = new PlaylistList('#playlist-list');
 		playlistList.show();
 		setupPlaylistAdding(playlistList);
+		setupMutualAppear(playlistList);
 
 		spotifyApi = new SpotifyWebApi();
 		spotifyApi.setAccessToken(spotifyHash.access_token);
@@ -53,7 +54,8 @@ function setupPlaylistAdding(playlistList) {
                     playlist.songs = songList;
                     playlistList.add(playlist);
                     playlistList.render();
-                    hideAddPlaylistLoading();
+					hideAddPlaylistLoading();
+					updateMutualAppear(playlistList.list.length);
                 });
 			}, onErr);
 	});
@@ -76,13 +78,41 @@ function setupPlaylistAdding(playlistList) {
 	}
 }
 
+function setupMutualAppear(playlistList) {
+	updateMutualAppear(playlistList.list.length);
+
+	var inputElem = $('#mutual-appear-input');
+	inputElem.on("propertychange change click keyup keydown input paste", function () {
+		var max = playlistList.list.length;
+		var newVal = inputElem.val();
+		if (newVal > max) {
+			inputElem.val(max);
+		}
+		if (newVal < 2) {
+			inputElem.val(2);
+		}
+	});
+}
+
+function getMutualAppear() {
+	return $('#mutual-appear-input').val();
+}
+
+function updateMutualAppear(newCount) {
+	if (newCount < 2) {
+		$('#mutual-appear').hide();
+	} else {
+		$('#mutual-appear').show();
+	}
+	$('#mutual-appear-input').val(newCount);
+	$('#playlist-count').text(newCount);
+}
+
 function showPlaylistAdder() {
-	$('#mutual-figure').show();
 	$('#playlist-adder').show();
 }
 
 function hidePlaylistAdder() {
-	$('#mutual-figure').hide();
 	$('#playlist-adder').hide();
 }
 
@@ -466,6 +496,7 @@ PlaylistList.prototype.render = function() {
 						this.list.splice(i, 1);
 
 						this.render();
+						updateMutualAppear(this.list.length);
 					}
 					gtag("event", "remove_playlist", {
 						event_label: result.value ? "remove" : "cancel"
