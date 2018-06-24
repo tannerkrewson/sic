@@ -27,7 +27,12 @@ function showPlaylistBtn(playlistList) {
 	var playlistBtn = $('#create-playlist-btn');
 	playlistBtn.off();
 	$('#create-playlist-btn:enabled').click(function() {
-		onUbiquitise(playlistList);
+		showCreatePlaylistLoading();
+
+		// timeout prevents ui thread from locking up
+		// before the loading thing above has time to render
+		setTimeout(() => onUbiquitise(playlistList), 10);
+		
 	});
 	playlistBtn.show();
 }
@@ -215,8 +220,6 @@ function parsePlaylistURL(input) {
 }
 
 function onUbiquitise(playlistList) {
-    showCreatePlaylistLoading();
-
 	var thisUserId = spotifyApi.thisUser.id;
 	var countedList = countAllSongs(playlistList);
 
