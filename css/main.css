@@ -23,11 +23,6 @@ body {
     display: none;
 }
 
-#instructions {
-    display: none;
-    text-align: center;
-}
-
 #login-info {
     display: none;
 }
