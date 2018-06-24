@@ -218,7 +218,10 @@ function onUbiquitise(playlistList) {
     showCreatePlaylistLoading();
 
 	var thisUserId = spotifyApi.thisUser.id;
-	var newSongList = ubiquitiseList(playlistList);
+	var countedList = countAllSongs(playlistList);
+
+	var minimumAppearances = getMutualAppear();
+	var newSongList = ubiquitiseList(countedList, minimumAppearances);
 	newSongList = removeDuplicates(newSongList);
     newSongList = getListOfURIsFromListOfSongs(newSongList);
 
@@ -270,37 +273,57 @@ function onUbiquitise(playlistList) {
 	}
 }
 
-function ubiquitiseList(playlistList) {
+function countAllSongs(playlistList) {
 	playlistList = playlistList.list;
-	var masterList;
+	var masterList = [];
 	for (var i = 0; i < playlistList.length; i++) {
 		var thisSongList = playlistList[i].songs;
-		if (i === 0) {
-			masterList = thisSongList;
-		} else {
-			masterList = ubiquitiseTwo(masterList, thisSongList);
-		}
+		ubiquitiseTwo(masterList, thisSongList);
 	}
 	return masterList;
 }
 
-function ubiquitiseTwo(listOne, listTwo) {
-	var songList = [];
-	for (var i in listOne) {
-		for (var j in listTwo) {
-			var songOne = listOne[i].track;
-		    var songTwo = listTwo[j].track;
+function ubiquitiseTwo(master, listToAdd) {
+	var newSongs = [];
+	for (var i in listToAdd) {
+		var newSong = listToAdd[i];
+		var found = false;
 
-			if (areSameSong(songOne, songTwo)) {
-				songList.push(listOne[i]);
+		// look for the new song from listToAdd 
+		// in master
+		for (var j in master) {
+			var potentialSame = master[j];
+			
+			// if it's already in there, just increment
+			// the count and move on
+			if (areSameSong(newSong, potentialSame.song)) {
+				potentialSame.count++;
+				found = true;
+				break;
 			}
 		}
+
+		// if the song wasn't in master, save it to 
+		// be added in at the end
+		if (!found) {
+			newSongs.push({
+				song: newSong,
+				count: 1
+			});
+		}
 	}
-	return songList;
+
+	// add all of the songs that weren't already in master 
+	// to master
+	master.push(...newSongs);
 }
 
 function areSameSong (songOne, songTwo) {
+	songOne = songOne.track;
+	songTwo = songTwo.track;
+
 	var sameURI = songOne.uri === songTwo.uri;
+	
 	var notALocalSong = !songOne.uri.startsWith('spotify:local');
 	var sameISRC = false;
 
@@ -325,16 +348,23 @@ function areSameSong (songOne, songTwo) {
 	return (sameURI || sameISRC || sameTitleAndArtist) && notALocalSong;
 }
 
+function ubiquitiseList(countedList, min) {
+	var res = [];
+	for (var track of countedList) {
+		if (track.count >= min) {
+			res.push(track.song);
+		}
+	}
+	return res;
+}
+
 function removeDuplicates (songList) {
 	var newSongList = [];
 
 	for (var i in songList) {
 		var isSongADupe = false;
 		for (var j in newSongList) {
-			var songOne = songList[i].track;
-		    var songTwo = newSongList[j].track;
-
-			isSongADupe = areSameSong(songOne, songTwo);
+			isSongADupe = areSameSong(songList[i], newSongList[j]);
 			if (isSongADupe) {
 				break;
 			}
