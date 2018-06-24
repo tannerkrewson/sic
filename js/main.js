@@ -456,9 +456,25 @@ PlaylistList.prototype.render = function() {
 	if (this.list.length === 0) {
 		theList.append(getListItemHTML('Empty!'));
 	} else {
-		for (var i in this.list) {
-			var pl = this.list[i];
-			theList.append(getListItemHTML(pl.name));
+		for (let i in this.list) {
+			let pl = this.list[i];
+			let elem = $(getListItemHTML(pl.name));
+			theList.append(elem);
+			
+			elem.click(function() {
+				swal({
+					title: 'Remove ' + pl.name + '?',
+					type: 'warning',
+					showCancelButton: true,
+					confirmButtonText: 'Yes, remove it'
+				}).then((result) => {
+					if (result) {
+						swal('would if i could, boss!');
+					}
+				}).catch((err) => {
+					console.error(err);
+				});
+			});
 		}
 	}
 
